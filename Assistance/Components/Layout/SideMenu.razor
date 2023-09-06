@@ -1,11 +1,11 @@
 ﻿<Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet" ThemeContrast="ThemeContrast.Dark"
-     Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small">
-    <BarToggler />
+     Mode="BarMode.VerticalPopout" CollapseMode="BarCollapseMode.Small" >
+    <BarToggler Mode="BarTogglerMode.Normal" />
     <BarBrand>
         <BarItem>
-            <BarLink To="">
+            <BarLink>
                 <BarIcon IconName="customIcon" />
-                Assistance
+                MENÚ
             </BarLink>
         </BarItem>
     </BarBrand>
@@ -17,37 +17,31 @@
                     Dashboard
                 </BarLink>
             </BarItem>
+            
             <BarItem>
-                <BarDropdown @bind-Visible="pagesBarVisible">
-                    <BarDropdownToggle>
-                        <BarIcon IconName="IconName.Edit" />
-                        Pages
-                    </BarDropdownToggle>
-                    <BarDropdownMenu>
-                        <BarDropdownItem To="/simple-form">Simple Form</BarDropdownItem>
-                    </BarDropdownMenu>
-                </BarDropdown>
+                <BarLink To="/Assistances">
+                    <BarIcon Class="fa-solid fa-list-check" />
+                    Asistencias
+                </BarLink>
             </BarItem>
-        </BarStart>
-        <BarEnd>
             <BarItem>
                 <BarDropdown>
                     <BarDropdownToggle>
-                        <BarIcon IconName="IconName.Smartphone" />
-                        Apps
+                        <BarIcon IconName="IconName.LayerGroup" />
+                        Catálogos
                     </BarDropdownToggle>
                     <BarDropdownMenu>
-                        <BarDropdownItem To="/apps/todo">
-                            Todo
-                        </BarDropdownItem>
-                    </BarDropdownMenu>
+                        <BarDropdownItem To="/Catalogs/Employees">Empleados</BarDropdownItem>
+                        <BarDropdownItem To="/Catalogs/Departments">Departamentos</BarDropdownItem>
+                        <BarDropdownItem To="/Catalogs/Jobs">Puestos</BarDropdownItem>
+                        <BarDropdownItem To="/Catalogs/Shifts">Turnos</BarDropdownItem>
+                        <BarDropdownItem To="/Catalogs/Locations">Zonas</BarDropdownItem>
+                    </BarDropdownMenu>                    
                 </BarDropdown>
             </BarItem>
-        </BarEnd>
+        </BarStart>        
     </BarMenu>
 </Bar>
-@code {
-    private bool pagesBarVisible = true;
-
+@code {    
     RenderFragment customIcon =@<img src="/brand-logo.png" style="width:32px; height: 32px" />;
 }

@@ -7,7 +7,7 @@
             <p>Sorry, there's nothing at this address.</p>
         </NotFound>
     </Router>
-    <MessageProvider />
+    <Noification />
     <PageProgressProvider />
 </Blazorise.ThemeProvider>
 @code {
@@ -15,33 +15,51 @@
         {
             BarOptions = new()
             {
-                HorizontalHeight = "72px"
+                HorizontalHeight = "70px"
             },
             ColorOptions = new()
             {
-                Primary = "#3B5998",
+                //Primary = "#3B5998",
+                Primary = "#7178C7",
                 Secondary = "#6C757D",
                 Success = "#19BF90",
-                Info = "#8FD9E4",
+                //Info = "#8FD9E4",
+                Info = "#39AFD1",
                 Warning = "#FFFF66",
-                Danger = "#CE504D",
-                Light = "#E2E2E2",
+                //Danger = "#CE504D",
+                Danger = "#E86D86",
+                //Light = "#E2E2E2",
+                Light = "#EEF2F7",
                 Dark = "#313A46",
             },
             BackgroundOptions = new()
             {
-                Primary = "#3B5998",
+                //Primary = "#3B5998",
+                Primary = "#7178C7",
                 Secondary = "#6C757D",
                 Success = "#19BF90",
-                Info = "#8FD9E4",
+                //Info = "#8FD9E4",
+                Info = "#39AFD1",
                 Warning = "#FFFF66",
-                Danger = "#CE504D",
-                Light = "#E2E2E2",
+                //Danger = "#CE504D",
+                Danger = "#E86D86",
+                //Light = "#E2E2E2",
+                Light = "#EEF2F7",
                 Dark = "#313A46",
             },
             InputOptions = new()
             {
-                CheckColor = "#3B5998",
-            }
+                CheckColor = "#487ACA",
+            },
+            PaginationOptions = new()
+            {
+                Size = Size.Small,
+                BorderRadius = "1rem",
+            },
+            BodyOptions = new()
+            {
+                //BackgroundColor = "#EEEEEE",
+                BackgroundColor = "#FAFBFE",
+            },
         };
 }

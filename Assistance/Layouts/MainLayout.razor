@@ -1,57 +1,26 @@
 ﻿@using Assistance.Components.Layout
 @inherits LayoutComponentBase
 
-
-@if ( layoutType == "fixed-header" )
-{
-    <Layout Sider>
-        <LayoutSider>
-            <LayoutSiderContent>
-                <SideMenu />
-            </LayoutSiderContent>
-        </LayoutSider>
-        <Layout>
+<LoadingIndicator>
+    <ChildContent>
+        @*<Layout>
             <LayoutHeader Fixed>
-                <TopMenu ThemeEnabledChanged="@OnThemeEnabledChanged"
-                     ThemeGradientChanged="@OnThemeGradientChanged"
-                     ThemeRoundedChanged="@OnThemeRoundedChanged"
-                     ThemeColorChanged="@OnThemeColorChanged"
-                     @bind-LayoutType="@layoutType" />
+                <TopMenu />
             </LayoutHeader>
-            <LayoutContent Padding="Padding.Is4.OnX.Is4.FromTop">
-                @Body
-            </LayoutContent>
-        </Layout>
-    </Layout>
-}
-else if ( layoutType == "fixed-header-footer-only" )
-{
-    <Layout>
-        <LayoutHeader Fixed>
-            <TopMenu ThemeEnabledChanged="@OnThemeEnabledChanged"
-                 ThemeGradientChanged="@OnThemeGradientChanged"
-                 ThemeRoundedChanged="@OnThemeRoundedChanged"
-                 ThemeColorChanged="@OnThemeColorChanged"
-                 @bind-LayoutType="@layoutType" />
-        </LayoutHeader>
-        <LayoutContent Padding="Padding.Is4.OnX.Is4.FromTop">
-            @Body
-        </LayoutContent>
-        <LayoutFooter Fixed>
-            <FooterMenu></FooterMenu>
-        </LayoutFooter>
-    </Layout>
-}
-else if ( layoutType == "sider-with-header-on-top" )
-{
-    <Layout>
-        <LayoutHeader Fixed>
-            <TopMenu ThemeEnabledChanged="@OnThemeEnabledChanged"
-                 ThemeGradientChanged="@OnThemeGradientChanged"
-                 ThemeRoundedChanged="@OnThemeRoundedChanged"
-                 ThemeColorChanged="@OnThemeColorChanged"
-                 @bind-LayoutType="@layoutType" />
-        </LayoutHeader>
+            <Layout Sider>
+                <LayoutSider>
+                    <LayoutSiderContent>
+                        <SideMenu />
+                    </LayoutSiderContent>
+                </LayoutSider>
+                <Layout>
+                    <LayoutContent Padding="Padding.Is4.OnX.Is2.FromTop">
+                        @Body
+                    </LayoutContent>
+                </Layout>
+            </Layout>
+        </Layout>*@
+
         <Layout Sider>
             <LayoutSider>
                 <LayoutSiderContent>
@@ -59,10 +28,19 @@ else if ( layoutType == "sider-with-header-on-top" )
                 </LayoutSiderContent>
             </LayoutSider>
             <Layout>
-                <LayoutContent Padding="Padding.Is4.OnX.Is4.FromTop">
+                <LayoutHeader Fixed>
+                    <TopMenu />
+                </LayoutHeader>
+                <LayoutContent Padding="Padding.Is4.OnX.Is2.FromTop">
                     @Body
                 </LayoutContent>
             </Layout>
         </Layout>
-    </Layout>
-}
+    </ChildContent>
+    <IndicatorTemplate>        
+        <Div Class="spinner"></Div>        
+        <h6 class="ms-2">Cargando...</h6>
+    </IndicatorTemplate>
+</LoadingIndicator>
+
+
