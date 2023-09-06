@@ -1,0 +1,79 @@
+﻿@inject MessageService MSERVICE
+
+<Snackbar @ref="NotificationRef" Class=@ColorClass Location="SnackbarLocation.BottomEnd" Interval="3000">
+    <SnackbarBody>
+        <Div Class="d-flex my-auto">
+            <h6 class=@ColorClass><Icon Name=@_icon Class="me-2"></Icon></h6>
+            <b>@_message</b>
+        </Div>
+
+        <SnackbarAction Clicked="@(()=>NotificationRef.Hide())">
+            <Icon Name="IconName.Times" Class="text-dark" />
+        </SnackbarAction>
+
+    </SnackbarBody>
+</Snackbar>
+
+@code {
+    public Snackbar NotificationRef { get; set; }
+
+    private string ColorClass;
+    private string _message;
+    private IconName _icon;
+
+
+    protected override void OnInitialized()
+    {
+        MSERVICE.OnShow += ShowMessage;
+    }
+
+
+    private void ShowMessage(string Message, NotificationLevel notification)
+    {
+        ShowingMessage(notification, Message);
+        NotificationRef.Show();
+        StateHasChanged();
+    }
+
+
+    private void ShowingMessage(NotificationLevel level, string Message)
+    {
+        switch (level)
+        {
+            case NotificationLevel.Info:
+                ColorClass = "alert-primary";
+                _icon = IconName.InfoCircle;
+                break;
+
+            case NotificationLevel.Success:
+                ColorClass = "alert-success";
+                _icon = IconName.CheckCircle;
+                break;
+
+            case NotificationLevel.Warning:
+                ColorClass = "alert-warning";
+                _icon = IconName.ExclamationTriangle;
+                break;
+
+            case NotificationLevel.Error:
+                ColorClass = "alert-danger";
+                _icon = IconName.TimesCircle;
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(level), level, null);
+        }
+
+        _message = Message;
+    }
+
+
+    //TYPE OF NOTIFICATION
+    public enum NotificationLevel
+    {
+        Info,
+        Success,
+        Warning,
+        Error
+    }
+}

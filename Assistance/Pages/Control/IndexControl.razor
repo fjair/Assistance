@@ -1,0 +1,434 @@
+﻿@page "/Assistances"
+
+<Div Class="row">
+    <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <h3 class="text-secondary">
+            Asistencias
+        </h3>
+    </Div>
+
+    <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12 my-auto">
+        <Breadcrumb Class="float-end" TextColor="TextColor.Dark">
+            <BreadcrumbItem>
+                <BreadcrumbLink><Icon Name="IconName.Home" /></BreadcrumbLink>
+            </BreadcrumbItem>            
+            <BreadcrumbItem Active>
+                <BreadcrumbLink>Asistencias</BreadcrumbLink>
+            </BreadcrumbItem>
+        </Breadcrumb>
+    </Div>
+</Div>
+
+
+
+<Div Class="card bg-white shadow-sm">
+    @*<Div Class="card-header bg-dark text-white">
+        <Icon Class="fa-solid fa-table-cells" />
+        <Strong>Lista de Asistencias</Strong>
+    </Div>*@
+    <Div Class="card-body">
+        <Div Class="row">
+            <Div Class="col-xl-7 col-lg-7 col-md-7 col-sm-12">
+
+                <Buttons Size="Size.Small" Class="mb-2">
+                    <Button Color="Color.Light" >
+                        <Icon Class="fa-regular fa-file-pdf" />
+                        <Strong>Pdf</Strong>
+                    </Button>
+
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-regular fa-file-excel" />
+                        <Strong>Excel</Strong>
+                    </Button>
+                    
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-solid fa-print" />
+                        <Strong>Imprimir</Strong>
+                    </Button>
+                </Buttons>
+
+                <Buttons Size="Size.Small" Class="mb-2">
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-solid fa-calendar-day" />
+                        <Strong>Hoy</Strong>
+                    </Button>
+
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-solid fa-calendar-week" />
+                        <Strong>Semana</Strong>
+                    </Button>
+
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-solid fa-calendar-days" />
+                        <Strong>Mes</Strong>
+                    </Button>
+                </Buttons>
+            </Div>
+
+            <Div Class="col-xl-5 col-lg-5 col-md-5 col-sm-12">                   
+                <Addons Size="Size.Small" Class="mb-2">
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Text="@customFilterValue" TextChanged="@OnCustomFilterValueChanged" Placeholder="Buscar..."></TextEdit>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <AddonLabel><Icon Name="IconName.Search"></Icon></AddonLabel>
+                    </Addon>
+                </Addons>
+            </Div>
+        </Div>
+
+        <DataGrid TItem="Tblregistro"
+                  Data="@lstAssistance"
+                  Narrow
+                  Hoverable
+                  ShowPager
+                  ShowPageSizes
+                  PageSize="10"
+                  Responsive
+                  CustomFilter="@OnCustomFilter"
+                  SelectionMode="DataGridSelectionMode.Multiple"
+                  @bind-SelectedRows="selectedRecords"
+                  RowSelectable="@RowSelectableHandler"
+                  RowDoubleClicked="@OnDoubleClick"
+                  RowStyling="@OnRowStyling"
+                  @ref="dataGrid">
+
+            <DataGridColumns>
+                <DataGridMultiSelectColumn TItem="Tblregistro" Width="30px"></DataGridMultiSelectColumn>
+                <DataGridCommandColumn TItem="Tblregistro" />
+                <DataGridColumn Field="@nameof( Tblregistro.GetEmployeeName )" Caption="EMPLEADO"></DataGridColumn>
+                <DataGridColumn Field="@nameof( Tblregistro.FechaEntrada )" Caption="ENTRADA"></DataGridColumn>
+                <DataGridColumn Field="@nameof( Tblregistro.GetInputZone )" Caption="Z. ENTRADA"></DataGridColumn>
+                <DataGridColumn Field="@nameof(Tblregistro.GetInputStatus)" Caption="ESTATUS" HeaderTextAlignment="TextAlignment.Center" TextAlignment="TextAlignment.Center">
+                    <DisplayTemplate>
+
+                        @if (statusColors.TryGetValue(context.EstatusHorarioEntradaId, out Color color))
+                        {
+                            <Badge Color="color" >@context.GetInputStatus</Badge>
+                        }
+                        else
+                        {
+                            <Badge Color="Color.Default" >Sin Status</Badge>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn Field="@nameof( Tblregistro.FechaSalida )" Caption="SALIDA"></DataGridColumn>
+                <DataGridColumn Field="@nameof( Tblregistro.GetOutputZone )" Caption="Z. SALIDA"></DataGridColumn>
+                <DataGridColumn Field="@nameof(Tblregistro.GetOutputStatus)" Caption="ESTATUS" HeaderTextAlignment="TextAlignment.Center" TextAlignment="TextAlignment.Center">
+                    <DisplayTemplate>
+
+                        @if (statusColors.TryGetValue(context.EstatusHorarioSalidaId, out Color color))
+                        {
+                            <Badge Color="color" >@context.GetOutputStatus</Badge>
+                        }
+                        else
+                        {
+                            <Badge Color="Color.Default" >Sin Status</Badge>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+
+            <NextPageButtonTemplate><Icon Name="IconName.StepForward" /></NextPageButtonTemplate>
+            <PreviousPageButtonTemplate><Icon Name="IconName.StepBackward" /></PreviousPageButtonTemplate>
+            <LastPageButtonTemplate><Icon Name="IconName.Forward" /></LastPageButtonTemplate>
+            <FirstPageButtonTemplate><Icon Name="IconName.Backward" /></FirstPageButtonTemplate>
+            <ItemsPerPageTemplate></ItemsPerPageTemplate>
+            <TotalItemsTemplate>
+                <Badge Color="Color.Dark">Total: @context.TotalItems registros</Badge>
+            </TotalItemsTemplate>
+        </DataGrid>
+    </Div>
+</Div>
+
+
+<Modal @ref="modalRef" Animated >
+    <ModalContent Centered Size="ModalSize.Small">
+        <ModalHeader Class="alert-info text-uppercase d-flex justify-content-center text-center">
+            <ModalTitle Class="text-center">
+                <Icon Name="IconName.InfoCircle"></Icon>
+                Detalle
+            </ModalTitle>
+        </ModalHeader>
+
+        <ModalBody>
+            <EditForm Model="recordModel">                
+                <Div Class="card bg-white shadow-lg">
+                    <Div Class="card-body">
+                        <Div Class="text-center mb-2">
+                            <Icon Name="IconName.UserCircle" IconSize="IconSize.x3" />
+                        </Div>
+
+                        @*INF GENERAL*@
+                        <Divider DividerType="DividerType.TextContent" Text="Empleado" />
+                        <ul class="nav flex-column mb-2">
+                            <li class="nav-item input-xs">
+                                <Icon Class="fa-solid fa-address-card me-1" />
+                                @recordModel.GetEmployeeName
+                            </li>
+                            <li class="nav-item input-xs">
+                                <Icon Class="fa-solid fa-building me-1" />
+                                @recordModel.GetEmployeeDepartment
+                            </li>
+                            <li class="nav-item input-xs">
+                                <Icon Class="fa-solid fa-briefcase me-1" /> 
+                                @recordModel.GetEmployeeJob
+                            </li>
+                            <li class="nav-item input-xs">
+                                <Icon Class="fa-solid fa-user-clock me-1" />
+                                @recordModel.GetEMployeeShift
+                            </li>
+                        </ul>
+                      
+
+                        @*ENTRADA*@
+                        <Divider DividerType="DividerType.TextContent" Text="Entrada" />
+                        <ul class="nav flex-column mb-2">
+                            <li class="nav-item input-xs">
+                                <Icon Class="fa-solid fa-clock me-1" />
+                               @recordModel.FechaEntrada.ToShortTimeString()
+                            </li>
+                            <li class="nav-item input-xs">
+                                <Icon Class="fa-solid fa-location-dot me-1" />
+                               @recordModel.GetInputZone
+                            </li>
+                            <li class="nav-item input-xs">
+                                <Icon Class="fa-solid fa-business-time me-1" />
+                                <Badge Color="Color.Dark">@recordModel.GetInputStatus</Badge>
+                            </li>                            
+                        </ul>
+                        
+                                                
+                        @*SALIDA*@
+                        <Divider DividerType="DividerType.TextContent" Text="Salida" />
+                        @if (!string.IsNullOrEmpty(recordModel.FechaSalida?.ToShortTimeString()))
+                        {
+                            <ul class="nav flex-column mb-2">
+                                <li class="nav-item input-xs">
+                                    <Icon Class="fa-solid fa-clock me-1" />
+                                    @(recordModel.FechaSalida?.ToShortTimeString())
+                                </li>
+                                <li class="nav-item input-xs">
+                                    <Icon Class="fa-solid fa-location-dot me-1" />
+                                    @recordModel.GetOutputZone
+                                </li>
+                                <li class="nav-item input-xs">
+                                    <Icon Class="fa-solid fa-business-time me-1" />
+                                    <Badge Color="Color.Dark">@recordModel.GetOutputStatus</Badge>
+                                </li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <Div Class="text-center">
+                                <Badge Color="Color.Success">En Turno!</Badge>
+                            </Div>
+                        }
+                    </Div>
+                </Div>
+            </EditForm>
+
+        </ModalBody>        
+    </ModalContent>
+</Modal>
+
+
+<DetailModal @ref="detailRef" modalSize="ModalSize.Default">
+    <EditForm Model="recordModel">
+        <Div Class="card bg-white shadow-lg">
+            <Div Class="card-body">
+                <Div Class="text-center mb-2">
+                    <Icon Name="IconName.UserCircle" IconSize="IconSize.x4" />
+                </Div>
+
+                @*INF GENERAL*@
+                <Divider DividerType="DividerType.TextContent" Text="Empleado" />
+                <ul class="nav flex-column mb-2">
+                    <li class="nav-item ">
+                        <Icon Class="fa-solid fa-address-card me-1" />
+                        @recordModel.GetEmployeeName
+                    </li>
+                    <li class="nav-item ">
+                        <Icon Class="fa-solid fa-building me-1" />
+                        @recordModel.GetEmployeeDepartment
+                    </li>
+                    <li class="nav-item ">
+                        <Icon Class="fa-solid fa-briefcase me-1" />
+                        @recordModel.GetEmployeeJob
+                    </li>
+                    <li class="nav-item ">
+                        <Icon Class="fa-solid fa-user-clock me-1" />
+                        @recordModel.GetEMployeeShift
+                    </li>
+                </ul>
+
+
+                @*ENTRADA*@
+                <Divider DividerType="DividerType.TextContent" Text="Entrada" />
+                <ul class="nav flex-column mb-2">
+                    <li class="nav-item ">
+                        <Icon Class="fa-solid fa-clock me-1" />
+                        @recordModel.FechaEntrada.ToShortTimeString()
+                    </li>
+                    <li class="nav-item ">
+                        <Icon Class="fa-solid fa-location-dot me-1" />
+                        @recordModel.GetInputZone
+                    </li>
+                    <li class="nav-item ">
+                        <Icon Class="fa-solid fa-business-time me-1" />
+                        <Badge Color="Color.Dark">@recordModel.GetInputStatus</Badge>
+                    </li>
+                </ul>
+
+
+                @*SALIDA*@
+                <Divider DividerType="DividerType.TextContent" Text="Salida" />
+                @if (!string.IsNullOrEmpty(recordModel.FechaSalida?.ToShortTimeString()))
+                {
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item ">
+                            <Icon Class="fa-solid fa-clock me-1" />
+                            @(recordModel.FechaSalida?.ToShortTimeString())
+                        </li>
+                        <li class="nav-item ">
+                            <Icon Class="fa-solid fa-location-dot me-1" />
+                            @recordModel.GetOutputZone
+                        </li>
+                        <li class="nav-item ">
+                            <Icon Class="fa-solid fa-business-time me-1" />
+                            <Badge Color="Color.Dark">@recordModel.GetOutputStatus</Badge>
+                        </li>
+                    </ul>
+                }
+                else
+                {
+                    <Alert Color="Color.Success" Visible>
+                        <AlertMessage>EN TURNO!</AlertMessage>
+                        <AlertDescription>El emplado aún se encuentra laborando.</AlertDescription>
+                    </Alert>
+                }
+            </Div>
+        </Div>
+    </EditForm>
+</DetailModal>
+
+
+
+@code {
+    [CascadingParameter] LoadingIndicator loadingIndicator { get; set; }
+    [Inject] IAssistanceService assistanceService { get; set; }   
+    [Inject] IShiftService shiftService { get; set; }
+    [Inject] MessageService messageService { get; set; }
+
+    List<Tblregistro> lstAssistance = new();   
+   
+
+    protected override async Task OnInitializedAsync()
+    {
+        await loadingIndicator.Show();
+        try
+        {
+            await Task.Delay(150);
+            
+            lstAssistance = await assistanceService.GetAssistances();
+        }
+        catch (Exception ex)
+        {
+            messageService.ShowNotification($"Error al iniciar: {ex.Message}", Noification.NotificationLevel.Error);
+            throw;
+        }
+        finally
+        {
+            await loadingIndicator.Hide();
+        }
+    }
+
+
+    #region DETAILS
+    Tblregistro recordModel = new();
+    Modal modalRef;
+    DetailModal detailRef;
+    DeleteModal deleteModal;    
+
+    //details modal
+    private Task DetailsModal(Tblregistro currentRecord)
+    {
+        recordModel = currentRecord;
+        return detailRef.OpenModal();
+        //return modalRef.Show();
+    }    
+
+    
+    private Dictionary<int?, Color> statusColors = new Dictionary<int?, Color>
+    {
+        { 1, Color.Success},
+        { 2, Color.Warning },
+        { 3, Color.Primary },
+        { 4, Color.Info },
+        { 5, Color.Dark },
+        { 6, Color.Secondary },
+    };
+    
+
+    #endregion
+
+    #region FOR GRID
+    private DataGrid<Tblregistro> dataGrid;
+    private List<Tblregistro> selectedRecords;
+    private string customFilterValue;
+
+    private Task OnCustomFilterValueChanged(string e)
+    {
+        customFilterValue = e;
+        return dataGrid.Reload();
+    }
+
+    private bool OnCustomFilter(Tblregistro model)
+    {
+        if (string.IsNullOrEmpty(customFilterValue))
+            return true;
+
+        return (
+                model.FechaEntrada.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.GetEmployeeName?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.GetInputZone?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.GetOutputZone.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true                
+                || model.GetInputStatus.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true                
+                || model.GetOutputStatus.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true                
+                || model.FechaSalida.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true                
+                );
+    }
+
+    private void OnRowStyling(Tblregistro model, DataGridRowStyling styling)
+    {
+        //if (!model.Activo ?? false)
+        //    styling.Color = Color.Danger;
+    }
+
+    private bool RowSelectableHandler(RowSelectableEventArgs<Tblregistro> rowSelectableEventArgs)
+        => rowSelectableEventArgs.SelectReason is not DataGridSelectReason.RowClick;
+
+
+    public async void OnDoubleClick(Blazorise.DataGrid.DataGridRowMouseEventArgs<Tblregistro> args)
+    {
+        await DetailsModal(args.Item);
+    }
+
+    #endregion
+
+    #region TOOLS
+    private bool cancelClose;
+    private Task OnModalClosing(ModalClosingEventArgs e)
+    {
+        e.Cancel = cancelClose || e.CloseReason != CloseReason.UserClosing;
+        return Task.CompletedTask;
+    }
+
+    private Task CloseModal()
+    {
+        return modalRef.Hide();
+    }
+
+    #endregion
+}
+

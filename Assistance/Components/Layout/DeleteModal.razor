@@ -1,0 +1,60 @@
+﻿<Modal @ref="ModalRef" Animated Closing="OnModalClosing">
+    <ModalContent Centered Size="ModalSize.Small">
+        <ModalHeader Class="alert-warning text-uppercase d-flex justify-content-center text-center">
+            <ModalTitle Class="text-center">
+                <Icon Name="IconName.ExclamationTriangle"></Icon>
+                Alerta
+            </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            <AlertMessage>¿Quiere desactivar este regitro?</AlertMessage>
+            @if (lastMessage != null)
+            {
+                <br />
+                <AlertDescription>@lastMessage</AlertDescription>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Danger" Size="Size.Small" Clicked="OnDoShomething">
+                <Icon Name="IconName.Check"></Icon>
+                <b>Sí, Desactivar</b>
+            </Button>
+
+            <Button Color="Color.Secondary" Size="Size.Small" Clicked="CloseModal">
+                <Icon Name="IconName.Times"></Icon>
+                <b>No, Cancelar</b>
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter] public EventCallback DeleteRecord { get; set; }
+    
+    [Parameter] public string lastMessage { get; set; }
+
+
+    private Modal ModalRef;
+
+    public Task OpenModal()
+    {
+        return ModalRef.Show();
+    }
+
+    public Task CloseModal()
+    {
+        return ModalRef.Hide();
+    }
+
+    public async Task OnDoShomething()
+    {
+        await DeleteRecord.InvokeAsync();
+    }
+    
+    private bool cancelClose;
+    private Task OnModalClosing(ModalClosingEventArgs e)
+    {
+        e.Cancel = cancelClose || e.CloseReason != CloseReason.UserClosing;
+        return Task.CompletedTask;
+    }
+}

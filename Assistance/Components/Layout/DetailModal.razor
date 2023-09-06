@@ -1,0 +1,32 @@
+﻿
+<Modal @ref="modalRef" Animated>
+    <ModalContent Centered Size="@modalSize">
+        <ModalHeader Class="alert-primary text-uppercase d-flex justify-content-center text-center">
+            <ModalTitle Class="text-center">
+                <Icon Name="IconName.InfoCircle"></Icon>
+                Detalle
+            </ModalTitle>
+        </ModalHeader>
+
+        <ModalBody>            
+            @ChildContent            
+        </ModalBody>       
+    </ModalContent>
+</Modal>
+
+@code {
+    Modal modalRef;
+
+    [Parameter] public ModalSize modalSize { get; set; }       
+    [Parameter] public RenderFragment ChildContent { get; set; }    
+
+    public Task OpenModal()
+    {
+        return modalRef.Show();
+    }
+
+    public Task CloseModal()
+    {
+        return modalRef.Hide();
+    }    
+}

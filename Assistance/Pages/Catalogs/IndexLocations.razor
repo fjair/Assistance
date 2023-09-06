@@ -1,0 +1,366 @@
+﻿@page "/Catalogs/Locations"
+
+<Div Class="row">
+    <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <h3 class="text-secondary">
+            Zonas
+        </h3>
+    </Div>
+
+    <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <Breadcrumb Class="float-end text-dark">
+            <BreadcrumbItem>
+                <BreadcrumbLink><Icon Name="IconName.Home" /></BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+                <BreadcrumbLink><Icon Name="IconName.LayerGroup" /></BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem Active>
+                <BreadcrumbLink>Zonas</BreadcrumbLink>
+            </BreadcrumbItem>
+        </Breadcrumb>
+    </Div>
+</Div>
+
+
+<Div Class="card bg-white shadow-sm">
+   @* <Div Class="card-header bg-dark text-white">
+        <Icon Class="fa-solid fa-table-cells" />
+        <Strong>Lista de Zonas</Strong>
+    </Div>*@
+    <Div Class="card-body">
+        <Div Class="row">
+            <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                <Button Color="Color.Primary" Size="Size.Small" Clicked="AddModal" Class="mb-2">
+                    <Icon Name="IconName.Add" />
+                    <Strong>Nueva</Strong>
+                </Button>
+
+                <Buttons Size="Size.Small" Class="mb-2">
+                    <Button Color="Color.Light" >
+                        <Icon Class="fa-regular fa-file-pdf" />
+                        <Strong>Pdf</Strong>
+                    </Button>
+
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-regular fa-file-excel" />
+                        <Strong>Excel</Strong>
+                    </Button>
+                    
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-solid fa-print" />
+                        <Strong>Imprimir</Strong>
+                    </Button>
+                </Buttons>
+            </Div>
+
+            <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                <Addons Size="Size.Small" Class="mb-2">
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Text="@customFilterValue" TextChanged="@OnCustomFilterValueChanged" Placeholder="Buscar..."></TextEdit>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <AddonLabel><Icon Name="IconName.Search"></Icon></AddonLabel>
+                    </Addon>
+                </Addons>
+            </Div>
+        </Div>
+
+        <DataGrid TItem="Tblzona"
+                  Data="@lstLocations"
+                  Narrow
+                  Hoverable
+                  ShowPager
+                  ShowPageSizes
+                  PageSize="10"
+                  Responsive
+                  CustomFilter="@OnCustomFilter"
+                  SelectionMode="DataGridSelectionMode.Multiple"
+                  @bind-SelectedRows="selectedRecords"
+                  RowSelectable="@RowSelectableHandler"
+                  RowDoubleClicked="@OnDoubleClick"
+                  RowStyling="@OnRowStyling"
+                  @ref="dataGrid">
+
+            <DataGridColumns>
+                <DataGridMultiSelectColumn TItem="Tblzona" Width="30px"></DataGridMultiSelectColumn>
+                <DataGridCommandColumn TItem="Tblzona" />
+                <DataGridColumn Field="@nameof( Tblzona.ZonaId )" Caption="#"></DataGridColumn>
+                <DataGridColumn Field="@nameof( Tblzona.Zona )" Caption="EMPLEADO"></DataGridColumn>                                
+                <DataGridColumn Field="" Caption="ACCIONES">
+                    <DisplayTemplate>
+                        <Tooltip Text="Editar">
+                            <Button Background="Background.Transparent" Size="Size.Small" Clicked="() => UpdateModal(context)">
+                                <Icon Name="IconName.Edit"></Icon>
+                            </Button>
+                        </Tooltip>
+
+                        <Tooltip Text="Desactivar">
+                            <Button Background="Background.Transparent" Size="Size.Small" Clicked="() => DeleteModal(context)">
+                                <Icon Name="IconName.Delete"></Icon>
+                            </Button>
+                        </Tooltip>
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+
+            <NextPageButtonTemplate><Icon Name="IconName.StepForward" /></NextPageButtonTemplate>
+            <PreviousPageButtonTemplate><Icon Name="IconName.StepBackward" /></PreviousPageButtonTemplate>
+            <LastPageButtonTemplate><Icon Name="IconName.Forward" /></LastPageButtonTemplate>
+            <FirstPageButtonTemplate><Icon Name="IconName.Backward" /></FirstPageButtonTemplate>
+            <ItemsPerPageTemplate></ItemsPerPageTemplate>
+            <TotalItemsTemplate>
+                <Badge Color="Color.Dark">Total: @context.TotalItems registros</Badge>
+            </TotalItemsTemplate>
+        </DataGrid>
+    </Div>
+</Div>
+
+
+<Modal @ref="modalRef" Animated Closing="OnModalClosing">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>
+                <Icon Name="IconName.Edit" />
+                Zona
+            </ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+
+        <ModalBody>
+            <EditForm Model="locationModel">
+                <Validations @ref="validationsRef" Model="locationModel" Mode="ValidationMode.Manual">
+                    <Div Class="row">
+                        <Div Class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                            <Field>
+                                <FieldLabel Class="input-xs text-muted text-uppercase">Zona:</FieldLabel>
+                                <Validation Validator="ValidationRule.IsNotEmpty">
+                                    <TextEdit @bind-Text="locationModel.Zona" Disabled="disableForm" Size="Size.Small" Placeholder="ej: Zona Norte" TextTransform="TextTransform.Capitalize">
+                                        <Feedback>
+                                            <ValidationError>Campo obligatorio!</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </Field>
+                        </Div>                                       
+                    </Div>                                   
+                </Validations>
+            </EditForm>
+        </ModalBody>
+
+        <ModalFooter>
+            @if (!disableForm)
+            {
+                <Button Color="Color.Primary" Clicked="OnSave">
+                    <Icon Name="IconName.Save" />
+                    <Strong>Guardar</Strong>
+                </Button>
+            }
+
+            <Button Color="Color.Secondary" Clicked="CloseModal">
+                <Icon Name="IconName.Times" />
+                <Strong>Cerrar</Strong>
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<DeleteModal @ref="deleteModal"
+    DeleteRecord="() => OnDelete(locationModel)">
+</DeleteModal>
+
+
+@code {
+    [CascadingParameter] LoadingIndicator loadingIndicator { get; set; }
+    [Inject] ILocationService locationService { get; set; }    
+    [Inject] MessageService messageService { get; set; }
+
+    List<Tblzona> lstLocations = new();   
+
+    protected override async Task OnInitializedAsync()
+    {
+        await loadingIndicator.Show();
+        try
+        {
+            await Task.Delay(300);           
+            await LoadLocations();
+        }
+        catch (Exception ex)
+        {
+            messageService.ShowNotification($"Error al iniciar: {ex.Message}", Noification.NotificationLevel.Error);
+            throw;
+        }
+        finally
+        {
+            await loadingIndicator.Hide();
+        }
+    }
+
+    private async Task LoadLocations()
+    {
+        lstLocations = await locationService.GetLocations();
+    }
+
+    #region CRUD
+    Tblzona locationModel = new();
+    Modal modalRef;
+    DeleteModal deleteModal;
+    Validations validationsRef;
+    bool isNew, disableForm;
+
+    //details modal
+    private Task DetailsModal(Tblzona currentRecord)
+    {
+        locationModel = currentRecord;
+        isNew = false;
+        disableForm = true;
+        return modalRef.Show();
+    }
+
+
+
+    //add modal
+    private Task AddModal()
+    {
+        locationModel = new();
+        isNew = true;
+        disableForm = false;
+        return modalRef.Show();
+    }
+
+    //update modal
+    private Task UpdateModal(Tblzona currentRecord)
+    {
+        CopyData(currentRecord);
+        isNew = false;
+        disableForm = false;
+        return modalRef.Show();
+    }
+
+    //copy for update
+    private Tblzona CopyData(Tblzona currentData)
+    {
+        locationModel.ZonaId = currentData.ZonaId;
+        locationModel.Zona = currentData.Zona;     
+        locationModel.FechaAlta = currentData.FechaAlta;
+
+        return locationModel;
+    }
+
+    //Save
+    private async Task OnSave()
+    {
+        if (await validationsRef.ValidateAll())
+        {
+            try
+            {
+                if (isNew)
+                {
+                    await locationService.PostLocation(locationModel);
+                    messageService.ShowNotification("Zona Guardada!", Noification.NotificationLevel.Success);
+                }
+                else
+                {
+                    await locationService.PutLocation(locationModel);
+                    messageService.ShowNotification("Zona Actualizada!", Noification.NotificationLevel.Info);
+                }
+
+                await LoadLocations();
+            }
+            catch (Exception ex)
+            {
+                messageService.ShowNotification($"ERROR: {ex.Message}", Noification.NotificationLevel.Error);
+                throw;
+            }
+            finally
+            {
+                await CloseModal();
+            }
+        }
+    }
+
+    //delete modal
+    private Task DeleteModal(Tblzona currentRecord)
+    {        
+        locationModel = currentRecord;
+        return deleteModal.OpenModal();
+    }
+
+    //delete record
+    private async Task OnDelete(Tblzona recordToDelete)
+    {
+        try
+        {
+            await locationService.PutLocation(recordToDelete);
+            messageService.ShowNotification("Zona Inactiva!", Noification.NotificationLevel.Warning);
+            await LoadLocations();
+        }
+        catch (Exception ex)
+        {
+            messageService.ShowNotification($"ERROR:{ex.Message}", Noification.NotificationLevel.Error);
+            throw;
+        }
+        finally
+        {
+            await deleteModal.CloseModal();
+        }
+    }
+
+    #endregion
+
+    #region FOR GRID
+    private DataGrid<Tblzona> dataGrid;
+    private List<Tblzona> selectedRecords;
+    private string customFilterValue;
+
+    private Task OnCustomFilterValueChanged(string e)
+    {
+        customFilterValue = e;
+        return dataGrid.Reload();
+    }
+
+    private bool OnCustomFilter(Tblzona model)
+    {
+        if (string.IsNullOrEmpty(customFilterValue))
+            return true;
+
+        return (
+                model.ZonaId.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.Zona?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.FechaAlta.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true                
+                );
+    }
+
+    private void OnRowStyling(Tblzona model, DataGridRowStyling styling)
+    {
+        //if (!model.Activo ?? false)
+        //    styling.Color = Color.Danger;
+    }
+
+    private bool RowSelectableHandler(RowSelectableEventArgs<Tblzona> rowSelectableEventArgs)
+        => rowSelectableEventArgs.SelectReason is not DataGridSelectReason.RowClick;
+
+
+    public async void OnDoubleClick(Blazorise.DataGrid.DataGridRowMouseEventArgs<Tblzona> args)
+    {
+        await DetailsModal(args.Item);
+    }
+
+    #endregion
+
+    #region TOOLS
+    private bool cancelClose;
+    private Task OnModalClosing(ModalClosingEventArgs e)
+    {
+        e.Cancel = cancelClose || e.CloseReason != CloseReason.UserClosing;
+        return Task.CompletedTask;
+    }
+
+    private Task CloseModal()
+    {
+        return modalRef.Hide();
+    }
+
+    #endregion
+}
+

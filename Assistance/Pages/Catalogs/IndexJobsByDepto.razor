@@ -1,0 +1,384 @@
+﻿@page "/Catalogs/Department/{id:int}/Jobs/"
+
+<Div Class="row">
+    <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <h3 class="text-secondary">
+            Puestos - @departmentModel.Departamento
+        </h3>
+    </Div>
+
+    <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <Breadcrumb Class="float-end text-dark">
+            <BreadcrumbItem>
+                <BreadcrumbLink><Icon Name="IconName.Home" /></BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+                <BreadcrumbLink><Icon Name="IconName.LayerGroup" /></BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+                <BreadcrumbLink Class="text-decoration-none text-dark" To="/Catalogs/Departments">@departmentModel.Departamento</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem Active>
+                <BreadcrumbLink>Puestos</BreadcrumbLink>
+            </BreadcrumbItem>
+        </Breadcrumb>
+    </Div>
+</Div>
+<Divider />
+
+
+<Div Class="card bg-white shadow-sm">
+    @*<Div Class="card-header bg-dark text-white">
+        <Icon Class="fa-solid fa-table-cells" />
+        <Strong>Lista de Puestos en @departmentModel.Departamento</Strong>
+    </Div>*@
+    <Div Class="card-body">
+        <Div Class="row">            
+            <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">     
+                <Button Color="Color.Primary"  Clicked="AddModal" Size="Size.Small" Class="mb-2">
+                    <Icon Name="IconName.Add"></Icon>
+                    <Strong>Nuevo</Strong>
+                </Button>
+
+                <Buttons Size="Size.Small" Class="mb-2">
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-regular fa-file-pdf" />
+                        <Strong>Pdf</Strong>
+                    </Button>
+
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-regular fa-file-excel" />
+                        <Strong>Excel</Strong>
+                    </Button>
+
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-solid fa-print" />
+                        <Strong>Imprimir</Strong>
+                    </Button>
+                </Buttons>
+            </Div>
+
+            <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                <Addons Size="Size.Small" Class="mb-2">
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Text="@customFilterValue" TextChanged="@OnCustomFilterValueChanged" Placeholder="Buscar..."></TextEdit>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <AddonLabel><Icon Name="IconName.Search"></Icon></AddonLabel>
+                    </Addon>
+                </Addons>
+            </Div>
+        </Div>
+
+        <DataGrid TItem="Tblpuesto"
+                  Data="@lstJobs"
+                  Narrow
+                  Hoverable
+                  ShowPager
+                  ShowPageSizes
+                  PageSize="10"
+                  Responsive
+                  CustomFilter="@OnCustomFilter"
+                  SelectionMode="DataGridSelectionMode.Multiple"
+                  @bind-SelectedRows="selectedRecords"
+                  RowSelectable="@RowSelectableHandler"
+                  RowDoubleClicked="@OnDoubleClick"
+                  RowStyling="@OnRowStyling"
+                  @ref="dataGrid">
+
+            <DataGridColumns>
+                <DataGridMultiSelectColumn TItem="Tblpuesto" Width="30px"></DataGridMultiSelectColumn>
+                <DataGridCommandColumn TItem="Tblpuesto" />
+                <DataGridColumn Field="@nameof( Tblpuesto.PuestoId )" Caption="#"></DataGridColumn>
+                <DataGridColumn Field="@nameof( Tblpuesto.Puesto )" Caption="EMPLEADO"></DataGridColumn>                
+                <DataGridColumn Field="" Caption="ACCIONES">
+                    <DisplayTemplate>
+                        <Tooltip Text="Editar">
+                            <Button Background="Background.Transparent" Size="Size.Small" Clicked="() => UpdateModal(context)">
+                                <Icon Name="IconName.Edit"></Icon>
+                            </Button>
+                        </Tooltip>
+
+                        <Tooltip Text="Desactivar">
+                            <Button Background="Background.Transparent" Size="Size.Small" Clicked="() => DeleteModal(context)">
+                                <Icon Name="IconName.Delete"></Icon>
+                            </Button>
+                        </Tooltip>
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+
+            <NextPageButtonTemplate><Icon Name="IconName.StepForward" /></NextPageButtonTemplate>
+            <PreviousPageButtonTemplate><Icon Name="IconName.StepBackward" /></PreviousPageButtonTemplate>
+            <LastPageButtonTemplate><Icon Name="IconName.Forward" /></LastPageButtonTemplate>
+            <FirstPageButtonTemplate><Icon Name="IconName.Backward" /></FirstPageButtonTemplate>
+            <ItemsPerPageTemplate></ItemsPerPageTemplate>
+            <TotalItemsTemplate>
+                <Badge Color="Color.Dark">Total: @context.TotalItems registros</Badge>
+            </TotalItemsTemplate>
+        </DataGrid>
+    </Div>
+</Div>
+
+
+<Modal @ref="modalRef" Animated Closing="OnModalClosing">
+    <ModalContent Centered >
+        <ModalHeader>
+            <ModalTitle>
+                <Icon Name="IconName.Edit" />
+                Puesto
+            </ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+
+        <ModalBody>
+            <EditForm Model="jobModel">
+                <Validations @ref="validationsRef" Model="jobModel" Mode="ValidationMode.Manual">
+                    <Div Class="row">
+                        <Div Class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                            <Field>
+                                <FieldLabel Class="input-xs text-muted text-uppercase">Nombre del puesto:</FieldLabel>
+                                <Validation Validator="ValidationRule.IsNotEmpty">
+                                    <TextEdit @bind-Text="jobModel.Puesto" Disabled="disableForm" Size="Size.Small" TextTransform="TextTransform.Capitalize">
+                                        <Feedback> 
+                                            <ValidationError>Campo obligatorio!</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </Field>
+                        </Div>                       
+                    </Div>                    
+                </Validations>
+            </EditForm>
+        </ModalBody>
+
+        <ModalFooter>
+            @if (!disableForm)
+            {
+                <Button Color="Color.Primary" Clicked="OnSave">
+                    <Icon Name="IconName.Save" />
+                    <Strong>Guardar</Strong>
+                </Button>
+            }
+
+            <Button Color="Color.Secondary" Clicked="CloseModal">
+                <Icon Name="IconName.Times" />
+                <Strong>Cerrar</Strong>
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<DeleteModal @ref="deleteModal"
+             DeleteRecord="() => OnDelete(jobModel)">
+</DeleteModal>
+
+
+        @code {
+    [CascadingParameter] LoadingIndicator loadingIndicator { get; set; } 
+    [Parameter] public int ID {get; set;}
+    [Inject] IJobService jobService { get; set; }
+    [Inject] IDepartmentService departmentService { get; set; }
+    [Inject] MessageService messageService { get; set; }
+
+    List<Tblpuesto> lstJobs = new();
+    Tbldepartamento departmentModel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await loadingIndicator.Show();
+        try
+        {
+            await Task.Delay(300);
+
+            if (ID > 0)
+                departmentModel = await departmentService.GetDepartmentById(ID);
+
+            await LoadJobs();
+        }
+        catch (Exception ex)
+        {
+            messageService.ShowNotification($"Error al iniciar: {ex.Message}", Noification.NotificationLevel.Error);
+            throw;
+        }
+        finally
+        {
+            await loadingIndicator.Hide();
+        }
+    }
+
+    private async Task LoadJobs()
+    {
+        lstJobs = await jobService.GetJobs();
+    }
+
+    #region CRUD
+    Tblpuesto jobModel = new();
+    Modal modalRef;
+    DeleteModal deleteModal;
+    Validations validationsRef;
+    bool isNew, disableForm;
+
+    //details modal
+    private Task DetailsModal(Tblpuesto currentRecord)
+    {
+        jobModel = currentRecord;
+        isNew = false;
+        disableForm = true;
+        return modalRef.Show();
+    }
+
+
+
+    //add modal
+    private Task AddModal()
+    {
+        jobModel = new();
+        jobModel.DepartamentoId = ID;
+        isNew = true;
+        disableForm = false;
+        return modalRef.Show();
+    }
+
+    //update modal
+    private Task UpdateModal(Tblpuesto currentRecord)
+    {
+        CopyData(currentRecord);
+        isNew = false;
+        disableForm = false;        
+        return modalRef.Show();
+    }
+
+    //copy for update
+    private Tblpuesto CopyData(Tblpuesto currentData)
+    {
+        jobModel.PuestoId = currentData.PuestoId;
+        jobModel.Puesto = currentData.Puesto;
+        jobModel.DepartamentoId = currentData.DepartamentoId;
+        jobModel.Activo = currentData.Activo;
+        jobModel.FechaAlta = currentData.FechaAlta;        
+
+        return jobModel;
+    }
+
+    //Save
+    private async Task OnSave()
+    {
+        if (await validationsRef.ValidateAll())
+        {
+            try
+            {
+                if (isNew)
+                {
+                    await jobService.PostJob(jobModel);
+                    messageService.ShowNotification("Puesto Guardado!", Noification.NotificationLevel.Success);
+                }
+                else
+                {
+                    await jobService.PutJob(jobModel);
+                    messageService.ShowNotification("Puesto Actualizado!", Noification.NotificationLevel.Info);
+                }
+
+                await LoadJobs();
+            }
+            catch (Exception ex)
+            {
+                messageService.ShowNotification($"ERROR: {ex.Message}", Noification.NotificationLevel.Error);
+                throw;
+            }
+            finally
+            {
+                await CloseModal();
+            }
+        }
+    }
+
+    //delete modal
+    private Task DeleteModal(Tblpuesto currentRecord)
+    {        
+        jobModel = currentRecord;
+        return deleteModal.OpenModal();
+    }
+
+    //delete record
+    private async Task OnDelete(Tblpuesto recordToDelete)
+    {
+        try
+        {
+            recordToDelete.Activo = false;
+            await jobService.PutJob(recordToDelete);
+            messageService.ShowNotification("Puesto Inactivo!", Noification.NotificationLevel.Warning);
+            await LoadJobs();
+        }
+        catch (Exception ex)
+        {
+            messageService.ShowNotification($"ERROR:{ex.Message}", Noification.NotificationLevel.Error);
+            throw;
+        }
+        finally
+        {
+            await deleteModal.CloseModal();
+        }
+    }
+
+    #endregion
+
+    #region FOR GRID
+    private DataGrid<Tblpuesto> dataGrid;
+    private List<Tblpuesto> selectedRecords;
+    private string customFilterValue;
+
+    private Task OnCustomFilterValueChanged(string e)
+    {
+        customFilterValue = e;
+        return dataGrid.Reload();
+    }
+
+    private bool OnCustomFilter(Tblpuesto model)
+    {
+        if (string.IsNullOrEmpty(customFilterValue))
+            return true;
+
+        return (
+                model.PuestoId.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.Puesto?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.DepartamentoId.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.Activo.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true                
+                || model.FechaAlta.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.GetDepartamento?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                );
+    }
+
+    private void OnRowStyling(Tblpuesto model, DataGridRowStyling styling)
+    {
+        if (!model.Activo ?? false)
+            styling.Color = Color.Danger;
+    }
+
+    private bool RowSelectableHandler(RowSelectableEventArgs<Tblpuesto> rowSelectableEventArgs)
+        => rowSelectableEventArgs.SelectReason is not DataGridSelectReason.RowClick;
+
+
+    public async void OnDoubleClick(Blazorise.DataGrid.DataGridRowMouseEventArgs<Tblpuesto> args)
+    {
+        await DetailsModal(args.Item);
+    }
+
+    #endregion
+
+    #region TOOLS
+    private bool cancelClose;
+    private Task OnModalClosing(ModalClosingEventArgs e)
+    {
+        e.Cancel = cancelClose || e.CloseReason != CloseReason.UserClosing;
+        return Task.CompletedTask;
+    }
+
+    private Task CloseModal()
+    {
+        return modalRef.Hide();
+    }
+
+    #endregion
+}
+

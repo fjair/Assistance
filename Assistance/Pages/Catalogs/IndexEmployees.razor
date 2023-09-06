@@ -1,0 +1,512 @@
+﻿@page "/Catalogs/Employees"
+
+@*HEADER PAGE*@
+<Div Class="row">
+    <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <h3 class="text-secondary">
+            Empleados
+        </h3>
+    </Div>
+
+    <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <Breadcrumb Class="float-end text-dark">
+            <BreadcrumbItem>
+                <BreadcrumbLink><Icon Name="IconName.Home" /></BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+                <BreadcrumbLink><Icon Name="IconName.LayerGroup" /></BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem Active>
+                <BreadcrumbLink>Empleados</BreadcrumbLink>
+            </BreadcrumbItem>
+        </Breadcrumb>
+    </Div>
+</Div>
+
+@*GRID WITH ALL RECORDS*@
+<Div Class="card bg-white shadow-sm">    
+    <Div Class="card-body">
+        <Div Class="row">
+            <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                <Button Color="Color.Primary" Size="Size.Small" Clicked="AddModal" Class="mb-2">
+                    <Icon Name="IconName.Add" />
+                    <Strong>Nuevo</Strong>
+                </Button>
+
+                <Buttons Size="Size.Small" Class="mb-2">
+                    <Button Color="Color.Light" >
+                        <Icon Class="fa-regular fa-file-pdf" />
+                        <Strong>Pdf</Strong>
+                    </Button>
+
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-regular fa-file-excel" />
+                        <Strong>Excel</Strong>
+                    </Button>
+                    
+                    <Button Color="Color.Light">
+                        <Icon Class="fa-solid fa-print" />
+                        <Strong>Imprimir</Strong>
+                    </Button>
+                </Buttons>
+            </Div>
+
+            <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                <Addons Size="Size.Small" Class="mb-2">
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Text="@customFilterValue" TextChanged="@OnCustomFilterValueChanged" Placeholder="Buscar..."></TextEdit>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <AddonLabel><Icon Name="IconName.Search"></Icon></AddonLabel>
+                    </Addon>
+                </Addons>
+            </Div>
+        </Div>
+
+        <DataGrid TItem="Tblempleado"
+                  Data="@lstEmployees"
+                  Narrow
+                  Hoverable
+                  ShowPager
+                  ShowPageSizes
+                  PageSize="10"
+                  Responsive
+                  CustomFilter="@OnCustomFilter"
+                  SelectionMode="DataGridSelectionMode.Multiple"
+                  @bind-SelectedRows="selectedRecords"
+                  RowSelectable="@RowSelectableHandler"
+                  RowDoubleClicked="@OnDoubleClick"
+                  RowStyling="@OnRowStyling"
+                  @ref="dataGrid">
+
+            <DataGridColumns>
+                <DataGridMultiSelectColumn TItem="Tblempleado" Width="30px"></DataGridMultiSelectColumn>
+                <DataGridCommandColumn TItem="Tblempleado" />
+                <DataGridColumn Field="@nameof( Tblempleado.EmpleadoId )" Caption="#"></DataGridColumn>
+                <DataGridColumn Field="@nameof( Tblempleado.GetFullName )" Caption="EMPLEADO"></DataGridColumn>                
+                <DataGridColumn Field="@nameof( Tblempleado.Correo )" Caption="CORREO"></DataGridColumn>
+                <DataGridColumn Field="@nameof( Tblempleado.GetDepartament )" Caption="DEPARTAMENTO"></DataGridColumn>
+                <DataGridColumn Field="@nameof( Tblempleado.GetJob )" Caption="PUESTO"></DataGridColumn>
+                <DataGridColumn Field="@nameof( Tblempleado.GetShift )" Caption="TURNO"></DataGridColumn>                
+                <DataGridColumn Field="" Caption="ACCIONES">
+                    <DisplayTemplate>
+                        @if (context.Activo ?? false)
+                        {
+                            <Tooltip Text="Editar">
+                                <Button Background="Background.Transparent" Size="Size.Small" Clicked="() => UpdateModal(context)">
+                                    <Icon Name="IconName.Edit"></Icon>
+                                </Button>
+                            </Tooltip>
+
+                            <Tooltip Text="Desactivar">
+                                    <Button Background="Background.Transparent" Size="Size.Small" Clicked="() => DeleteModal(context)">
+                                    <Icon Name="IconName.Delete"></Icon>
+                                </Button>
+                             </Tooltip>
+                         }
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+
+            <NextPageButtonTemplate><Icon Name="IconName.StepForward" /></NextPageButtonTemplate>
+            <PreviousPageButtonTemplate><Icon Name="IconName.StepBackward" /></PreviousPageButtonTemplate>
+            <LastPageButtonTemplate><Icon Name="IconName.Forward" /></LastPageButtonTemplate>
+            <FirstPageButtonTemplate><Icon Name="IconName.Backward" /></FirstPageButtonTemplate>
+            <ItemsPerPageTemplate></ItemsPerPageTemplate>
+            <TotalItemsTemplate>
+                <Badge Color="Color.Dark">Total: @context.TotalItems registros</Badge>
+            </TotalItemsTemplate>
+        </DataGrid>
+    </Div>
+</Div>
+
+@*MODAL EDIT*@
+<Modal @ref="modalRef" Animated Closing="OnModalClosing">
+    <ModalContent Centered Size="ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>
+                <Icon Name="IconName.Edit" />
+                Empleado
+            </ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+
+        <ModalBody>
+            <EditForm Model="employeModel">
+                <Validations @ref="validationsRef" Model="employeModel" Mode="ValidationMode.Manual">  
+                    <Divider DividerType="DividerType.TextContent" Text="Información General" />
+                    <Div Class="row">
+                        <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <Field>
+                                <FieldLabel Class="input-xs text-muted text-uppercase">Nombre(s):</FieldLabel>
+                                <Validation Validator="ValidationRule.IsNotEmpty">
+                                    <TextEdit @bind-Text="employeModel.Nombre"  Size="Size.Small" Disabled="disableForm" TextTransform="TextTransform.Capitalize">
+                                        <Feedback>
+                                            <ValidationError>Campo obligatorio!</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </Field>
+                        </Div>
+
+                        <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <Field>
+                                <FieldLabel Class="input-xs text-muted text-uppercase">Apellido Paterno:</FieldLabel>
+                                <Validation Validator="ValidationRule.IsNotEmpty">
+                                    <TextEdit @bind-Text="employeModel.Paterno"  Size="Size.Small" Disabled="disableForm" TextTransform="TextTransform.Capitalize">
+                                        <Feedback>
+                                            <ValidationError>Campo obligatorio!</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </Field>
+                        </Div>                                                                      
+                    </Div> 
+                            
+                    <Div Class="row">
+                        <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <Field>
+                                <FieldLabel Class="input-xs text-muted text-uppercase">Apellido Materno:</FieldLabel>
+                                <Validation Validator="ValidationRule.IsNotEmpty">
+                                    <TextEdit @bind-Text="employeModel.Materno"  Size="Size.Small" Disabled="disableForm" TextTransform="TextTransform.Capitalize">
+                                        <Feedback>
+                                            <ValidationError>Campo obligatorio!</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </Field>
+                        </Div>
+
+                        <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <Field>
+                                <FieldLabel Class="input-xs text-muted text-uppercase">Correo electrónico:</FieldLabel>
+                                <Validation Validator="ValidationRule.IsEmail">
+                                    <TextEdit @bind-Text="employeModel.Correo"  Size="Size.Small" Disabled="disableForm" InputMode="TextInputMode.Email" TextTransform="TextTransform.Lowercase">
+                                        <Feedback>
+                                            <ValidationError>Campo obligatorio/Correo Válido!</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </Field>
+                        </Div>
+                    </Div>   
+
+                    <Divider DividerType="DividerType.TextContent" Text="Información Laboral" />
+                    <Div Class="row">                        
+                        <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <Field>
+                                <FieldLabel Class="input-xs text-muted text-uppercase">Departamento:</FieldLabel>
+                                <Autocomplete TItem="Tbldepartamento"
+                                            TValue="int?"
+                                            Size="Size.Small"
+                                            Data="@lstDepartments"
+                                            Virtualize
+                                            TextField="@(( item ) => $" {item.Departamento}")"
+                                            ValueField="@(( item ) => item.DepartamentoId)"
+                                            @bind-SelectedValue="employeModel.DepartamentoId"                                              
+                                            Placeholder="Presiona ESPACIO para abrir la Lista"
+                                            Filter="AutocompleteFilter.Contains"
+                                            FreeTyping     
+                                            Disabled="disableForm"
+                                            CustomFilter="@((item, searchValue) => searchValue.Split(' ').All(term => item.Departamento?.IndexOf(term, 0, StringComparison.CurrentCultureIgnoreCase) >= 0))"
+                                            Validator="ValidationRule.IsSelected">
+                                    <NotFoundContent Context="test"> Lo siento... @test no existe! :( </NotFoundContent>                                
+                                </Autocomplete>
+                            </Field>
+                        </Div>    
+
+                        <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <Field>
+                                <FieldLabel Class="input-xs text-muted text-uppercase">Puesto:</FieldLabel>
+                                <Autocomplete TItem="Tblpuesto"
+                                            TValue="int?"
+                                            Size="Size.Small"
+                                            Data="@(lstJobs.Where(x => x.DepartamentoId == employeModel.DepartamentoId).ToList())"
+                                            Virtualize
+                                            TextField="@(( item ) => $" {item.Puesto}")"
+                                            ValueField="@(( item ) => item.PuestoId)"
+                                            @bind-SelectedValue="@employeModel.PuestoId"                                              
+                                            Placeholder="Presiona ESPACIO para abrir la Lista"
+                                            Filter="AutocompleteFilter.Contains"
+                                            FreeTyping           
+                                            Disabled="disableForm"
+                                            CustomFilter="@((item, searchValue) => searchValue.Split(' ').All(term => item.Puesto?.IndexOf(term, 0, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                                                || searchValue.Split(' ').All(term => item.GetDepartamento?.IndexOf(term, 0, StringComparison.CurrentCultureIgnoreCase) >= 0))"
+                                            Validator="ValidationRule.IsSelected">
+                                    <NotFoundContent Context="test"> Lo siento... @test no existe! :( </NotFoundContent>                                    
+                                </Autocomplete>
+                            </Field>
+                        </Div>                                                       
+                    </Div>
+                            
+                    <Div Class="row">                        
+                        <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <Field>
+                                <FieldLabel Class="input-xs text-muted text-uppercase">Turno:</FieldLabel>
+                                <Autocomplete TItem="Tblturno"
+                                            TValue="int?"
+                                            Size="Size.Small"
+                                            Data="@lstShifts"
+                                            Virtualize
+                                            TextField="@(( item ) => $" {item.Turno}")"
+                                            ValueField="@(( item ) => item.TurnoId)"
+                                            @bind-SelectedValue="@employeModel.TurnoId"                                              
+                                            Placeholder="Presiona ESPACIO para abrir la Lista"
+                                            Filter="AutocompleteFilter.Contains"
+                                            FreeTyping
+                                            Disabled="disableForm"
+                                            CustomFilter="@((item, searchValue) => searchValue.Split(' ').All(term => item.Turno?.IndexOf(term, 0, StringComparison.CurrentCultureIgnoreCase) >= 0))"
+                                            Validator="ValidationRule.IsSelected">
+                                    <NotFoundContent Context="test"> Lo siento... @test no existe! :( </NotFoundContent>                                
+                                </Autocomplete>
+                            </Field>
+                        </Div>                                                                                       
+                    </Div>
+
+                </Validations>
+            </EditForm>
+        </ModalBody>
+
+        <ModalFooter>   
+            @if (!disableForm)
+            {
+                <Button Color="Color.Primary" Clicked="OnSave">
+                    <Icon Name="IconName.Save" />
+                    <Strong>Guardar</Strong>
+                </Button>
+            }
+
+            <Button Color="Color.Secondary" Clicked="CloseModal">
+                <Icon Name="IconName.Times" />
+                <Strong>Cerrar</Strong>
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@*MODAL DELETE*@
+<DeleteModal @ref="deleteModal"
+    DeleteRecord="() => OnDelete(employeModel)">
+</DeleteModal>
+
+
+@code {
+    [CascadingParameter] LoadingIndicator loadingIndicator { get; set; }
+    [Inject] IEmployeeService employeeService { get; set; }
+    [Inject] IShiftService shiftService { get; set; }
+    [Inject] IJobService jobService { get; set; }
+    [Inject] IDepartmentService departmentService { get; set; }
+    [Inject] MessageService messageService { get; set; }
+
+
+    List<Tblempleado> lstEmployees = new();
+    List<Tblturno> lstShifts = new();
+    List<Tbldepartamento> lstDepartments = new();
+    List<Tblpuesto> lstJobs = new();
+    private int departmentSelected = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await loadingIndicator.Show();
+        try
+        {
+            await Task.Delay(300);
+            lstDepartments = await departmentService.GetDepartments();
+            lstJobs = await jobService.GetJobs();
+            lstShifts = await shiftService.GetShifts();
+            await LoadEmployees();
+        }
+        catch (Exception ex)
+        {
+            messageService.ShowNotification($"Error al iniciar: {ex.Message}", Noification.NotificationLevel.Error);
+            throw;
+        }
+        finally
+        {
+            await loadingIndicator.Hide();
+        }
+    }
+
+    private async Task LoadEmployees()
+    {
+        lstEmployees = await employeeService.GetEmployees();
+    }
+
+    #region CRUD
+    Tblempleado employeModel = new();
+    Modal modalRef;   
+    DeleteModal deleteModal;
+    Validations validationsRef;
+    bool isNew, disableForm;
+
+    //details modal
+    private Task DetailsModal(Tblempleado currentRecord)
+    {
+        employeModel = currentRecord;
+        disableForm = true;
+        return modalRef.Show();
+    }
+
+
+    //add modal
+    private Task AddModal()
+    {
+        employeModel = new();
+        isNew = true;
+        disableForm = false;
+        return modalRef.Show();
+    }
+
+    //update modal
+    private Task UpdateModal(Tblempleado currentRecord)
+    {
+        employeModel = CopyData(currentRecord);
+        isNew = false;       
+        disableForm = false;
+        return modalRef.Show();
+    }
+
+    //copy for update
+    private Tblempleado CopyData(Tblempleado currentData)
+    {
+        var test = new Tblempleado
+        {
+            EmpleadoId = currentData.EmpleadoId,
+            Nombre = currentData.Nombre,
+            Paterno = currentData.Paterno,
+            Materno = currentData.Materno,
+            Correo = currentData.Correo,
+            DepartamentoId = currentData.DepartamentoId,
+            PuestoId = currentData.PuestoId,
+            TurnoId = currentData.TurnoId,
+            Activo = currentData.Activo,
+            FechaAlta = currentData.FechaAlta
+        };
+
+        return test;
+    }
+
+    //Save
+    private async Task OnSave()
+    {        
+        if (await validationsRef.ValidateAll())
+        {
+            try
+            {
+                if (isNew)
+                {
+                    await employeeService.PostEmployee(employeModel);
+                    messageService.ShowNotification("Empleado Guardado!", Noification.NotificationLevel.Success);
+                }
+                else
+                {
+                    await employeeService.PutEmployee(employeModel);
+                    messageService.ShowNotification("Empleado Actualizado!", Noification.NotificationLevel.Info);
+                }
+
+                await LoadEmployees();
+            }
+            catch (Exception ex)
+            {
+                messageService.ShowNotification($"ERROR: {ex.Message}", Noification.NotificationLevel.Error);
+                throw;
+            }
+            finally
+            {
+                await CloseModal();
+            }
+        }
+    }
+
+    //delete modal
+    private Task DeleteModal(Tblempleado currentRecord)
+    {        
+        employeModel = currentRecord;
+        return deleteModal.OpenModal();
+    }
+
+    //delete record
+    private async Task OnDelete(Tblempleado recordToDelete)
+    {
+        try
+        {
+            recordToDelete.Activo = false;
+            await employeeService.PutEmployee(recordToDelete);
+            messageService.ShowNotification("Empleado Inactivo!", Noification.NotificationLevel.Warning);
+            await LoadEmployees();
+        }
+        catch (Exception ex)
+        {
+            messageService.ShowNotification($"ERROR:{ex.Message}", Noification.NotificationLevel.Error);
+            throw;
+        }
+        finally
+        {
+            await deleteModal.CloseModal();
+        }
+    }
+
+    #endregion
+
+    #region FOR GRID
+    private DataGrid<Tblempleado> dataGrid;
+    private List<Tblempleado> selectedRecords;
+    private string customFilterValue;
+
+    private Task OnCustomFilterValueChanged(string e)
+    {
+        customFilterValue = e;
+        return dataGrid.Reload();
+    }
+
+    private bool OnCustomFilter(Tblempleado model)
+    {
+        if (string.IsNullOrEmpty(customFilterValue))
+            return true;
+
+        return (
+                model.EmpleadoId.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.Nombre?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.Paterno?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.Materno?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.Correo?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.Puesto.Puesto?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.Turno.Turno?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.Activo.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                || model.FechaAlta.ToString()?.Contains(customFilterValue, StringComparison.OrdinalIgnoreCase) == true
+                );
+    }
+
+    private void OnRowStyling( Tblempleado model, DataGridRowStyling styling )
+    {
+        if (!model.Activo ?? false)
+            styling.Color = Color.Danger;
+    }
+
+    private bool RowSelectableHandler(RowSelectableEventArgs<Tblempleado> rowSelectableEventArgs)
+        => rowSelectableEventArgs.SelectReason is not DataGridSelectReason.RowClick;
+
+
+    public async void OnDoubleClick(Blazorise.DataGrid.DataGridRowMouseEventArgs<Tblempleado> args)
+    {
+        await DetailsModal(args.Item);
+    }
+
+    #endregion
+
+    #region TOOLS
+    private bool cancelClose;
+    private Task OnModalClosing(ModalClosingEventArgs e)
+    {
+        e.Cancel = cancelClose || e.CloseReason != CloseReason.UserClosing;
+        return Task.CompletedTask;
+    }
+
+    private Task CloseModal()
+    {
+        return modalRef.Hide();
+    }
+
+    #endregion
+}
+
