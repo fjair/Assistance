@@ -1,3 +1,6 @@
+using Aplication.Catalogs;
+using Aplication.Control;
+using Assistance.Services;
 using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
@@ -7,6 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IJobService, JobService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IShiftService, ShiftService>();
+builder.Services.AddScoped<IAssistanceService, AssistanceService>();
+builder.Services.AddScoped<MessageService>();
 
 AddBlazorise(builder.Services);
 
