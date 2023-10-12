@@ -171,13 +171,13 @@
                         </Div>
 
                         <Div Class="col-xl-5 col-lg-5 col-md-5 col-sm-12">
-                            <Validation Validator="ValidationRule.IsNotEmpty">
-                                <NumericPicker TValue="int?" Size="Size.Small" @bind-Value="shiftModel.MtoleracianI">
-                                    <Feedback>
-                                        <ValidationError>Campo Obligatorio</ValidationError>
-                                    </Feedback>
-                                </NumericPicker>
-                            </Validation>
+                            
+                            <NumericPicker TValue="int?" Size="Size.Small" @bind-Value="shiftModel.MtoleracianI">
+                                <Feedback>
+                                    <ValidationError>Campo Obligatorio</ValidationError>
+                                </Feedback>
+                            </NumericPicker>
+                            
                         </Div>                        
                     </Div>
                     
@@ -313,12 +313,12 @@
                 if (isNew)
                 {
                     await shiftService.PostShift(shiftModel);
-                    messageService.ShowNotification("Puesto Guardado!", Noification.NotificationLevel.Success);
+                    messageService.ShowNotification("Turno Guardado!", Noification.NotificationLevel.Success);
                 }
                 else
                 {
                     await shiftService.PutShift(shiftModel);
-                    messageService.ShowNotification("Puesto Actualizado!", Noification.NotificationLevel.Info);
+                    messageService.ShowNotification("Turno Actualizado!", Noification.NotificationLevel.Info);
                 }
 
                 await LoadShifts();

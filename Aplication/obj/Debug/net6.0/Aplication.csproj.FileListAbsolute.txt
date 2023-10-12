@@ -1,8 +1,6 @@
 C:\Users\Programador\Source\Repos\Assistance\Aplication\bin\Debug\net6.0\Aplication.deps.json
 C:\Users\Programador\Source\Repos\Assistance\Aplication\bin\Debug\net6.0\Aplication.dll
 C:\Users\Programador\Source\Repos\Assistance\Aplication\bin\Debug\net6.0\Aplication.pdb
-C:\Users\Programador\Source\Repos\Assistance\Aplication\bin\Debug\net6.0\Entities.dll
-C:\Users\Programador\Source\Repos\Assistance\Aplication\bin\Debug\net6.0\Entities.pdb
 C:\Users\Programador\Source\Repos\Assistance\Aplication\obj\Debug\net6.0\Aplication.csproj.AssemblyReference.cache
 C:\Users\Programador\Source\Repos\Assistance\Aplication\obj\Debug\net6.0\Aplication.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Programador\Source\Repos\Assistance\Aplication\obj\Debug\net6.0\Aplication.AssemblyInfoInputs.cache

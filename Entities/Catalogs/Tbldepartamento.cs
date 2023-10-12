@@ -9,9 +9,7 @@ public partial class Tbldepartamento
 
     public string Departamento { get; set; }
 
-    public string Abreviatura { get; set; }
-
-    public int? AreaId { get; set; }
+    public string Abreviatura { get; set; }    
 
     public bool? Activo { get; set; } = true;
 

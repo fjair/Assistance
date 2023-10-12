@@ -44,8 +44,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcVG9wTWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Programador/source/repos/Assistance/Assistance/Layouts/ClockMainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0c1xDbG9ja01haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Layouts/LoginMainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0c1xMb2dpbk1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Programador/source/repos/Assistance/Assistance/Layouts/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0c1xNYWluTGF5b3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Account/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxMb2dpbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Account/MyProfile.razor]
@@ -87,6 +99,10 @@ build_metadata.AdditionalFiles.CssScope =
 [C:/Users/Programador/source/repos/Assistance/Assistance/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Control/Clock.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udHJvbFxDbG9jay5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-ljel16uob4
 
 [C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s

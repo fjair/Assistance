@@ -32,7 +32,7 @@ namespace Aplication.Catalogs
                 response.EnsureSuccessStatusCode();
 
                 List<Tblempleado> empleados = await response.Content.ReadFromJsonAsync<List<Tblempleado>>();
-                return empleados;
+                return empleados.OrderBy(x => x.EmpleadoId).ToList();
             }
             catch (Exception ex)
             {

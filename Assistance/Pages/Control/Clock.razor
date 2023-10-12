@@ -1,0 +1,186 @@
+﻿@page "/"
+
+@layout ClockMainLayout
+
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    body {
+        font-family: 'Exo', sans-serif;
+    }
+
+    .borde-verde {
+        border: 5px solid #00ff00; /* Borde verde de 5 píxeles de ancho */
+        box-sizing: border-box; /* Asegura que el borde se incluya en el tamaño total */
+    }
+</style>
+
+<div class="@($"{(mostrarContornoVerde ? "borde-verde" : string.Empty)}")">
+
+<Div Class="row justify-content-center align-items-center h-100 w-100" Style="position: absolute;">
+    <Div Class="col-md-8 col-lg-8 col-xl-8 col-sm-12">
+        <Div Class="card bg-white shadow-sm mb-2" Style="border-radius: 1rem; opacity: 0.5;">
+            <h1 class="text-center text-uppercase" style="color: black; font-size: 50px;">Bienvenido</h1>
+        </Div>
+
+        <Div Class="card bg-white shadow-sm mb-2" Style="border-radius: 1rem; opacity: 0.5;">
+            <h3 class="text-center " style="color: black;">@CurrentDate</h3>
+            <h2 class="text-center" style="color: black; font-size: 100px">@CurrentTime</h2>            
+        </Div>                
+                
+        <EditForm Model="capturaModel" OnValidSubmit="SaveRecord">
+            <Validations @ref="validationsRef" Mode="ValidationMode.Manual" Model="capturaModel">    
+                <Div Class="d-flex justify-content-center">
+                    <Field>
+                        
+                        <Addons Size="Size.ExtraLarge">                                   
+                            <Addon AddonType="AddonType.Body">
+                                <Validation Validator="@ValidateID">
+                                    <NumericEdit @bind-Value="capturaModel.EmpleadoId" Size="Size.ExtraLarge" Disabled="@loading" Placeholder="Enter your ID..." Class="text-center">
+                                        <Feedback>
+                                            <ValidationError>Campo Obligatorio!</ValidationError>
+                                        </Feedback>
+                                    </NumericEdit>
+                                </Validation>
+                            </Addon>
+                            <Addon AddonType="AddonType.End">
+                                <Button Color="Color.Dark" Type="ButtonType.Submit">
+                                    <Strong>REGISTRAR</Strong>
+                                </Button>
+                            </Addon>
+                            </Addons>                                                                            
+                    </Field>
+                </Div>
+            </Validations>
+        </EditForm>            
+    </Div>    
+</Div>
+
+<Div Class="d-flex justify-content-center align-items-center fixed-bottom mb-3">
+    <Button Color="Color.Primary" Clicked="Login" Class="rounded-circle" Style="width: 60px; height: 60px;">
+        <Icon Class="fa-solid fa-arrow-right-to-bracket"></Icon>
+    </Button>    
+</Div>
+    
+</div>
+
+
+
+<div class="area">
+    <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+
+<Snackbar @ref="snackbar" Class="alert-success" Location="SnackbarLocation.BottomEnd" Interval="600">
+    <SnackbarBody>
+        Registro Guardado!
+    </SnackbarBody>
+</Snackbar>
+
+@code {
+    private bool mostrarContornoVerde = true;
+    [Inject] IAssistanceService assistanceService { get; set; }
+    [Inject] MessageService messageService { get; set; }
+    [Inject] NavigationManager navigationManager { get; set; }
+
+    //variables for clock
+    protected string CurrentTime { get; set; }
+    protected string CurrentSeconds { get; set; }
+    protected string CurrentDate { get; set; }
+    protected string CurrentDay { get; set; }
+
+    //when page start
+    protected override void OnInitialized()
+    {
+        UpdateClock();
+    }
+
+    // update clock every second
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var timer = new System.Timers.Timer(1000);
+            timer.Elapsed += (_, _) => UpdateClock();
+            timer.Start();
+        }
+    }
+
+    //set value for clock variables
+    private void UpdateClock()
+    {
+        CurrentTime = DateTime.Now.ToString("h:mm:ss tt").ToUpper();
+        CurrentDate = DateTime.Now.ToString("D");
+        CurrentDay = DateTime.Now.ToString("dddd");
+        InvokeAsync(StateHasChanged);
+    }
+
+    #region FOR CHECK ASSISTANECE
+    private Captura capturaModel = new();
+    private Validations validationsRef;
+    private Snackbar snackbar;
+    private bool loading;
+
+    private async Task SaveRecord()
+    {
+        if (await validationsRef.ValidateAll())
+        {
+            loading = true;
+            try
+            {
+                capturaModel.ZonaId = 5;
+                await assistanceService.CheckAssistance(capturaModel);
+                mostrarContornoVerde = true;
+                await snackbar.Show();
+            }
+            catch (Exception ex)
+            {
+                messageService.ShowNotification($"ERROR: {ex.Message}", Noification.NotificationLevel.Success);
+            }
+            finally
+            {
+                await validationsRef.ClearAll();
+                capturaModel = new();
+                loading = false;
+                //mostrarContornoVerde = false;
+            }
+        }
+    }
+
+    private void ValidateID(ValidatorEventArgs e)
+    {
+        if (e.Value != null && capturaModel.EmpleadoId > 0 && !string.IsNullOrWhiteSpace(e.Value.ToString()))
+        {
+            e.Status = ValidationStatus.Success;
+        }
+        else
+        {
+            e.Status = ValidationStatus.Error;
+            e.ErrorText = "Campo Obligatorio";
+        }
+    }
+
+    private void Login()
+    {
+        navigationManager.NavigateTo("Account/Login");
+    }
+
+    #endregion
+}
+
+
+
+

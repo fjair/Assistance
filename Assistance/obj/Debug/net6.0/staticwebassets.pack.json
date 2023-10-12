@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\Programador\\source\\repos\\Assistance\\Assistance\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\Assistance.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Assistance.bundle.scp.css"
+    },
+    {
       "Id": "C:\\Users\\Programador\\source\\repos\\Assistance\\Assistance\\wwwroot\\brand-logo.png",
       "PackagePath": "staticwebassets\\brand-logo.png"
     },
@@ -11,6 +15,10 @@
     {
       "Id": "C:\\Users\\Programador\\source\\repos\\Assistance\\Assistance\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\Programador\\source\\repos\\Assistance\\Assistance\\wwwroot\\img\\bg.jpg",
+      "PackagePath": "staticwebassets\\img\\bg.jpg"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.Assistance.Microsoft.AspNetCore.StaticWebAssets.props",

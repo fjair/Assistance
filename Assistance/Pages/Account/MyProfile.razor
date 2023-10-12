@@ -1,0 +1,109 @@
+﻿@page "/Account/My-Profile"
+
+<Div Class="row">
+    <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <h3 class="text-secondary">
+            Mi Perfil
+        </h3>
+    </Div>
+
+    <Div Class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <Breadcrumb Class="float-end text-dark">
+            <BreadcrumbItem>
+                <BreadcrumbLink><Icon Name="IconName.Home" /></BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+                <BreadcrumbLink><Icon Name="IconName.UserCircle" /></BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem Active>
+                <BreadcrumbLink>Perfil</BreadcrumbLink>
+            </BreadcrumbItem>
+        </Breadcrumb>
+    </Div>
+</Div>
+
+<Div Class="row">
+    <Div Class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
+        <Div Class="card bg-white shadow-sm">
+            <Div Class="card-body">
+                <Div Class="d-flex text-secondary">
+                    <Icon Name="IconName.UserCircle" IconSize="IconSize.x4" Class="me-2" />
+                    <Div Padding="Padding.IsAuto.OnY" Margin="Margin.IsAuto.OnY">
+                        <Span Class="input-xs"><Icon Class="fa-solid fa-address-card me-2" /> Carlos Lozada</Span><br />
+                        <Span Class="input-xs"><Icon Class="fa-solid fa-user me-2" /> Administrador</Span><br />                       
+                    </Div>
+                </Div>
+
+                @*CUENTA*@
+                <Divider DividerType="DividerType.TextContent" Text="Cuenta" />
+                <Addons Size="Size.ExtraSmall" Class="mb-2">
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel>@@</AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Text="c_lozada" ReadOnly />
+                    </Addon>
+                </Addons>
+
+                <Addons Size="Size.ExtraSmall">
+                    <Addon AddonType="AddonType.Start">
+                        <AddonLabel><Icon Class="fa-solid fa-lock" /></AddonLabel>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit Text="123456789" Role="TextRole.Password" ReadOnly />
+                    </Addon>
+                </Addons>
+
+                @*LABORAL*@
+                <Divider DividerType="DividerType.TextContent" Text="Trabajo" />
+                <Span Class="input-xs"><Icon Class="fa-solid fa-building me-1" /> Sistemas</Span><br />
+                <Span Class="input-xs"><Icon Class="fa-solid fa-briefcase me-1" /> Programador</Span><br />
+                
+                @*CONFIGURATION*@
+                <Divider DividerType="DividerType.TextContent" Text="Config." />
+                <Button Size="Size.ExtraSmall" Background="Background.Transparent">
+                    <Icon Class="fa-solid fa-user-pen me-1" />
+                    Actualizar Datos.
+                </Button>  
+                
+                <Button Size="Size.ExtraSmall" Background="Background.Transparent">
+                    <Icon Class="fa-solid fa-user-lock me-1" />
+                    Cambiar Password.
+                </Button>               
+            </Div>
+        </Div>
+    </Div>
+
+    <Div Class="col-xl-9 col-lg-9 col-md-9 col-sm-12">
+        <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+            <Items>
+                <Tab Name="tab1">
+                    <Icon Name="IconName.Check" Class="me-1" TextColor="TextColor.Success"/>
+                    <Strong>Asistencias</Strong>
+                </Tab>
+                <Tab Name="tab2">
+                    <Icon Name="IconName.Times" Class="me-1" TextColor="TextColor.Danger" />
+                    <Strong>Asistencias</Strong>
+                </Tab>                
+            </Items>
+            <Content>
+                <TabPanel Name="tab1">
+                    Content for asistances.
+                </TabPanel>
+                <TabPanel Name="tab2">
+                    Content for insidencias.
+                </TabPanel>                
+            </Content>
+        </Tabs>
+    </Div>
+</Div>
+
+@code {
+    string selectedTab = "tab1";
+    private Task OnSelectedTabChanged(string name)
+    {
+        selectedTab = name;
+
+        return Task.CompletedTask;
+    }
+}

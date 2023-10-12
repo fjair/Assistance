@@ -37,7 +37,7 @@ public partial class Tblempleado
 
     public string GetFullName => $"{Nombre} {Paterno} {Materno}";   
 
-    public string GetDepartament => DepartamentoId < 0 || Departamento == null ? string.Empty : $"{Departamento.Departamento}";
+    public string GetDepartament => DepartamentoId > 0 && Departamento != null ? $"{Departamento.Departamento}" : string.Empty;
 
     public string GetJob => PuestoId < 0 || Puesto == null ? string.Empty : $"{Puesto.Puesto}";
 

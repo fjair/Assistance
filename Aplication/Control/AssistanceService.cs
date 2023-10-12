@@ -53,7 +53,7 @@ namespace Aplication.Control
                 response.EnsureSuccessStatusCode();
 
                 List<Tblregistro> asistencias = await response.Content.ReadFromJsonAsync<List<Tblregistro>>();
-                return asistencias;
+                return asistencias.OrderByDescending(x => x.FechaEntrada).ToList();
             }
             catch (Exception ex)
             {

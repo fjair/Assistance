@@ -209,7 +209,9 @@
 
     private async Task LoadJobs()
     {
-        lstJobs = await jobService.GetJobs();
+        lstJobs = (await jobService.GetJobs())
+        .Where(x => x.DepartamentoId == ID)
+        .ToList();
     }
 
     #region CRUD

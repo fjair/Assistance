@@ -32,7 +32,7 @@ namespace Aplication.Catalogs
                 response.EnsureSuccessStatusCode();
 
                 List<Tblzona> zonas = await response.Content.ReadFromJsonAsync<List<Tblzona>>();
-                return zonas;
+                return zonas.OrderBy(x => x.ZonaId).ToList();
             }
             catch (Exception ex)
             {

@@ -1,4 +1,10 @@
 ﻿@using System.Reflection
-<Bar Padding="Padding.Is1" Background="Background.Dark">
-    <Heading TextAlignment="TextAlignment.Center" Width="Width.Is100" TextColor="TextColor.White" Size="HeadingSize.Is6">@($"{Assembly.GetExecutingAssembly().GetName().Name} v{Assembly.GetExecutingAssembly().GetName().Version}")</Heading>
+<Bar Padding="Padding.Is1" Background="Background.Dark" Style="opacity: 0.7;">
+    <Heading TextAlignment="TextAlignment.Center" Width="Width.Is100" TextColor="TextColor.White" Size="HeadingSize.Is6">
+        <Span Class="me-2">&copy; @DateTime.Today.Year Todos los derechos reservados.</Span>
+        <Span Class="me-2">|</Span>
+        <Span Class="me-2">Control de Asistencias</Span>
+        <Span Class="me-2">|</Span>
+        <Span Class="me-2">Desarrollado por &copy; S4TIVA</Span>
+    </Heading>
 </Bar>

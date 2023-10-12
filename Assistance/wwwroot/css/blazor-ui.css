@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+
 #blazor-error-ui {
     background: #ffffe0;
     bottom: 0;
@@ -33,6 +35,14 @@
     font-size: 13px;
     line-height: 1.5;
     border-radius: 3px;
+}
+
+.centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
 }
 
 /*FOR SPINNER*/
@@ -71,3 +81,5 @@
         transform: rotate(1turn);
     }
 }
+
+/*THIS IS FOR CLOCK*/

@@ -31,7 +31,7 @@ namespace Aplication.Catalogs
                 response.EnsureSuccessStatusCode();
 
                 List<Tblturno> turnos = await response.Content.ReadFromJsonAsync<List<Tblturno>>();
-                return turnos;
+                return turnos.OrderBy(x => x.TurnoId).ToList();
             }
             catch (Exception ex)
             {

@@ -1,0 +1,60 @@
+﻿@page "/Account/Login"
+
+@layout LoginMainLayout
+
+<Div Class="container w-100 h-100">
+    <Div Class="row d-flex h-100 w-100 justify-content-center align-items-center">
+        <Div Class="col-xl-4 col-lg-4 col-md-5 col-sm-12">
+            <Div Class="card bg-white shadow-lg" Style="border-radius: 1rem;">
+                <Div Class="card-header bg-primary"></Div>
+
+                <Div Class="card-boody">
+                    <Div Class="text-center mt-2 p-3">
+                        <img src="img/bg.jpg" class="rounded-circle mb-2" alt="Logo Empresa" style="width: 100px; height: 100px;">
+                        <h3 class="mb-4">Inicio de Sesión</h3>
+
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel>
+                                        <Icon Name="IconName.User"></Icon>
+                                    </AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit Placeholder="Username..." />
+                                </Addon>
+                            </Addons>
+                        </Field>
+                    
+                        <Field>
+                            <Addons>
+                                <Addon AddonType="AddonType.Start">
+                                    <AddonLabel>
+                                        <Icon Name="IconName.Lock"></Icon>
+                                    </AddonLabel>
+                                </Addon>
+                                <Addon AddonType="AddonType.Body">
+                                    <TextEdit Placeholder="Password..." Role="TextRole.Password" />
+                                </Addon>
+                            </Addons>
+                        </Field>
+
+                        <Button Color="Color.Primary" Class="w-75 mt-3" Clicked="LoginToAccount">
+                            <Icon Class="fa-solid fa-arrow-right-to-bracket"></Icon>
+                            <Strong>Entrar</Strong>
+                        </Button>
+                    </Div>
+                </Div>
+            </Div>
+        </Div>
+    </Div>
+</Div>
+
+@code {
+    [Inject] NavigationManager navigationManager { get; set; }
+
+    private void LoginToAccount()
+    {
+        navigationManager.NavigateTo("/Home");
+    }
+}

@@ -1,0 +1,117 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Assistance
+build_property.RootNamespace = Assistance
+build_property.ProjectDir = C:\Users\Programador\source\repos\Assistance\Assistance\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\Programador\source\repos\Assistance\Assistance
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Components/Layout/DeleteModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcRGVsZXRlTW9kYWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Components/Layout/DetailModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcRGV0YWlsTW9kYWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Components/Layout/FooterMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcRm9vdGVyTWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Components/Layout/Noification.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTm9pZmljYXRpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Components/Layout/SideMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcU2lkZU1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Components/Layout/TopMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcVG9wTWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Layouts/ClockMainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0c1xDbG9ja01haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Layouts/LoginMainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0c1xMb2dpbk1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Layouts/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0c1xNYWluTGF5b3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Account/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxMb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Account/MyProfile.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxNeVByb2ZpbGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Catalogs/IndexDepartments.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0YWxvZ3NcSW5kZXhEZXBhcnRtZW50cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Catalogs/IndexEmployees.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0YWxvZ3NcSW5kZXhFbXBsb3llZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Catalogs/IndexJobs.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0YWxvZ3NcSW5kZXhKb2JzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Catalogs/IndexJobsByDepto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0YWxvZ3NcSW5kZXhKb2JzQnlEZXB0by5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Catalogs/IndexLocations.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0YWxvZ3NcSW5kZXhMb2NhdGlvbnMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Catalogs/IndexShifts.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0YWxvZ3NcSW5kZXhTaGlmdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Control/Dashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udHJvbFxEYXNoYm9hcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Control/IndexControl.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udHJvbFxJbmRleENvbnRyb2wucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Control/Clock.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udHJvbFxDbG9jay5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-ljel16uob4
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Programador/source/repos/Assistance/Assistance/Pages/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
