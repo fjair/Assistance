@@ -1,7 +1,6 @@
 C:\Users\Programador\Source\Repos\Assistance\Entities\bin\Debug\net6.0\Entities.deps.json
 C:\Users\Programador\Source\Repos\Assistance\Entities\bin\Debug\net6.0\Entities.dll
 C:\Users\Programador\Source\Repos\Assistance\Entities\bin\Debug\net6.0\Entities.pdb
-C:\Users\Programador\Source\Repos\Assistance\Entities\obj\Debug\net6.0\Entities.csproj.AssemblyReference.cache
 C:\Users\Programador\Source\Repos\Assistance\Entities\obj\Debug\net6.0\Entities.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Programador\Source\Repos\Assistance\Entities\obj\Debug\net6.0\Entities.AssemblyInfoInputs.cache
 C:\Users\Programador\Source\Repos\Assistance\Entities\obj\Debug\net6.0\Entities.AssemblyInfo.cs

@@ -11,3 +11,5 @@ C:\Users\Programador\Source\Repos\Assistance\Aplication\obj\Debug\net6.0\Aplicat
 C:\Users\Programador\Source\Repos\Assistance\Aplication\obj\Debug\net6.0\refint\Aplication.dll
 C:\Users\Programador\Source\Repos\Assistance\Aplication\obj\Debug\net6.0\Aplication.pdb
 C:\Users\Programador\Source\Repos\Assistance\Aplication\obj\Debug\net6.0\ref\Aplication.dll
+C:\Users\Programador\source\repos\Assistance\Aplication\bin\Debug\net6.0\Entities.dll
+C:\Users\Programador\source\repos\Assistance\Aplication\bin\Debug\net6.0\Entities.pdb
